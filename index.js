@@ -47,6 +47,7 @@ function add() {
     listaJogadores.forEach(jogador => {
         let listItem = document.createElement("li");
         listItem.className = "list-group-item";
+        listItem.id = "jogador";
 
         let node = document.createTextNode(jogador);
 
@@ -56,9 +57,14 @@ function add() {
         ul.appendChild(listItem);
     });
 
-    document.querySelectorAll(".list-group-item").forEach(item => item.addEventListener("click", event => {
+    document.querySelectorAll("#jogador").forEach(item => item.addEventListener("click", event => {
         item.remove();
+        let totalJogadores = parseInt(document.getElementById("total-jogadores").innerHTML) - 1;
+        document.getElementById("total-jogadores").innerHTML = totalJogadores;
     }))
+
+    let totalJogadores = parseInt(document.getElementById("total-jogadores").innerHTML) + listaJogadores.length;
+    document.getElementById("total-jogadores").innerHTML = totalJogadores;
 }
 
 function check() {
@@ -72,6 +78,7 @@ function check() {
 function showTeams(teams) {
 
     document.querySelector("#accordionPanelsStayOpenExample").innerHTML = "";
+    document.getElementById("times").style.display = "block";
     
 
     for (let i = 0; i<teams.size; i++) {

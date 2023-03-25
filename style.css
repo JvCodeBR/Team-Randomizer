@@ -1,8 +1,16 @@
 #players-list{
-    height:200px;
-    overflow-y:scroll
+    height:220px;
+    overflow-x: hidden;
 }
+
+#players-list::-webkit-scrollbar {
+    display: none;
+  }
 
 .list-group-item{
     cursor: pointer;
+}
+
+#times {
+    display: none;
 }
