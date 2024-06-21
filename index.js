@@ -46,7 +46,7 @@ function add() {
 
     listaJogadores.forEach(jogador => {
         let listItem = document.createElement("li");
-        listItem.className = "list-group-item";
+        listItem.className = "list-group-item item-remove pointer";
         listItem.id = "jogador";
 
         let node = document.createTextNode(jogador);
@@ -59,12 +59,9 @@ function add() {
 
     document.querySelectorAll("#jogador").forEach(item => item.addEventListener("click", event => {
         item.remove();
-        let totalJogadores = parseInt(document.getElementById("total-jogadores").innerHTML) - 1;
-        document.getElementById("total-jogadores").innerHTML = totalJogadores;
-    }))
-
-    let totalJogadores = parseInt(document.getElementById("total-jogadores").innerHTML) + listaJogadores.length;
-    document.getElementById("total-jogadores").innerHTML = totalJogadores;
+        document.getElementById("total-jogadores").innerHTML = document.querySelector("#players-list").childElementCount;
+    }));
+    document.getElementById("total-jogadores").innerHTML = document.querySelector("#players-list").childElementCount;
 }
 
 function check() {
@@ -77,60 +74,39 @@ function check() {
 
 function showTeams(teams) {
 
-    document.querySelector("#accordionPanelsStayOpenExample").innerHTML = "";
-    document.getElementById("times").style.display = "block";
-    
+    if (teams.size > 0) {
+        clearAccordion();
+        let title = document.createElement("h3");
+        title.className = "mt-3";
+        title.id = "times-title"
+        title.innerText = "Times";
+        document.getElementById("main").appendChild(title);
 
-    for (let i = 0; i<teams.size; i++) {
+        let accordion = document.createElement("div");
+        accordion.className = "accordion pb-3";
+        accordion.id = "times-accordion";
+        document.getElementById("main").appendChild(accordion);
 
-
-        let title = document.createElement("h2");
-        title.className = "accordion-header";
-        title.id = "panelsStayOpen-headingOne";
-
-        let button = document.createElement("button");
-        button.setAttribute("class", "accordion-button");
-        button.setAttribute("type", "button");
-        button.setAttribute('data-bs-toggle', 'collapse');
-        button.setAttribute("data-bs-target", "#panelsStayOpen-collapseOne");
-        button.setAttribute("aria-expanded", "true");
-        button.setAttribute("aria-controls", "panelsStayOpen-collapseOne");
-
-
-        let buttonNode = document.createTextNode(`Time ${i + 1}`)
-
-        button.appendChild(buttonNode);
-        title.appendChild(button);
-
-        let body = document.createElement("div");
-        body.setAttribute("id", "panelsStayOpen-collapseOne");
-        body.setAttribute("class", "accordion-collapse collapse show");
-        body.setAttribute("aria-labelledby" , "panelsStayOpen-headingOne");
-
-        let ul = document.createElement("ul");
-        ul.setAttribute("class", "list-group");
-        ul.setAttribute("id", "players-list-created");
-
-        teams.get(i+1).forEach(jogador => {
-            let li = document.createElement("li");
-            li.setAttribute("class", "list-group-item");
-            let nomeJogador = document.createTextNode(jogador);
-            li.appendChild(nomeJogador);
-            ul.appendChild(li);
-        })
-
-        body.appendChild(ul);
-
-        let accordionItem = document.createElement("div");
-        accordionItem.setAttribute("class", "accordion-item")
-        accordionItem.appendChild(title);
-        accordionItem.appendChild(body);
-
-        document.querySelector("#accordionPanelsStayOpenExample").appendChild(accordionItem);
-
-        
+        for (let i = 0; i<teams.size; i++) {
+            let item = '<div class="accordion-item">';
+            item += '<h2 class="accordion-header">';
+            item += `<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#time${i}" aria-expanded="true" aria-controls="time${i}">`;
+            item += `Time ${i+1}`;
+            item += '</button>';
+            item += '</h2>';
+            item += `<div id="time${i}" class="accordion-collapse collapse show">`;
+            item += '<div class="accordion-body">';
+            item += '<ul>';
+            teams.get(i+1).forEach(jogador => {
+                item += `<li>${jogador}</li>`;
+            });
+            item += '</ul>';
+            item += '</div>';
+            item += '</div>';
+            item += '</div>';
+            accordion.innerHTML += item;
+        }
     }
-    
 }
 
 function shuffle(array) {
@@ -146,4 +122,13 @@ function shuffle(array) {
   }
 
   return array;
+}
+
+function clearAccordion() {
+    let main = document.getElementById("main");
+    let title = document.getElementById("times-title");
+    let accordion = document.getElementById("times-accordion");
+
+    if (title) main.removeChild(title);
+    if (accordion) main.removeChild(accordion);
 }
